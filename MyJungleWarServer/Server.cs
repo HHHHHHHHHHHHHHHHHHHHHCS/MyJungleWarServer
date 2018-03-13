@@ -6,11 +6,11 @@ using System.Text;
 
 namespace MyJungleWarServer
 {
-    public class Program
+    public class Server
     {
         public static void Main(string[] args)
         {
-            Program p = new Program();
+            Server p = new Server();
             p.StartServerAsync();
         }
 
@@ -47,7 +47,8 @@ namespace MyJungleWarServer
         }
 
 
-        private byte[] asyncDataBuffer = new byte[1024];
+        private ServerMessage serverMessage = new ServerMessage();
+
         private void StartServerAsync()
         {
             Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -77,8 +78,7 @@ namespace MyJungleWarServer
             var data = Encoding.UTF8.GetBytes(msg);
             clientSocket.Send(data);
 
-            asyncDataBuffer = new byte[1024];
-            clientSocket.BeginReceive(asyncDataBuffer, 0, 1024, SocketFlags.None, ReceiveCallBack, clientSocket);
+            clientSocket.BeginReceive(serverMessage.Data, serverMessage.StartIndex, serverMessage.RemainIndex, SocketFlags.None, ReceiveCallBack, clientSocket);
 
             serverSocket.BeginAccept(AcceptCallBack, serverSocket);
         }
@@ -96,9 +96,9 @@ namespace MyJungleWarServer
                 }
                 else
                 {
-                    string msg = Encoding.UTF8.GetString(asyncDataBuffer, 0, count);
-                    Console.WriteLine(msg);
-                    clientSocket.BeginReceive(asyncDataBuffer, 0, 1024, SocketFlags.None, ReceiveCallBack, clientSocket);
+                    serverMessage.AddIndex(count);
+                    Console.WriteLine("Data:"+serverMessage.GetOneContent());
+                    clientSocket.BeginReceive(serverMessage.Data, serverMessage.StartIndex, serverMessage.RemainIndex, SocketFlags.None, ReceiveCallBack, clientSocket);
                 }
             }
             catch (Exception e)
