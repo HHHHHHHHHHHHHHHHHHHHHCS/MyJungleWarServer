@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TCPClient
 {
@@ -12,6 +11,11 @@ namespace TCPClient
     {
         static void Main(string[] args)
         {
+            MySQLConnect.Main main = new MySQLConnect.Main();
+            main.SelectUser();
+             Console.ReadLine();
+            return;
+
             Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             clientSocket.Connect(new IPEndPoint(IPAddress.Parse("192.168.0.120"), 6666));
 
