@@ -12,8 +12,8 @@ namespace TCPClient
         static void Main(string[] args)
         {
             MySQLConnect.Main main = new MySQLConnect.Main();
-            main.SelectUser();
-             Console.ReadLine();
+            main.UpdateUser("ddd","ddd");
+            Console.ReadLine();
             return;
 
             Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
