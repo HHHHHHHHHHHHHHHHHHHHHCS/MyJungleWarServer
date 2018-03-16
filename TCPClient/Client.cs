@@ -11,11 +11,6 @@ namespace TCPClient
     {
         static void Main(string[] args)
         {
-            MySQLConnect.Main main = new MySQLConnect.Main();
-            main.UpdateUser("ddd","ddd");
-            Console.ReadLine();
-            return;
-
             Socket clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             clientSocket.Connect(new IPEndPoint(IPAddress.Parse("192.168.0.120"), 6666));
 
