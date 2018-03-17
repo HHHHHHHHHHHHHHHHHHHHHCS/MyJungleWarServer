@@ -11,6 +11,18 @@ namespace MyJungleWarServer.Controller
     {
         RequestCode requestCode = RequestCode.None;
 
-        public virtual void DefaultHandle() { }
+        public RequestCode RequestCode
+        {
+            get
+            {
+                return requestCode;
+            }
+        }
+
+
+        public virtual string DefaultHandle(string data)
+        {
+            return null;
+        }
     }
 }
