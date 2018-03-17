@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{BF3DC00E-B12D-424F-A5A2-2D5D93660973}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>TCPClient</RootNamespace>
-    <AssemblyName>TCPClient</AssemblyName>
+    <RootNamespace>TCPClientTest</RootNamespace>
+    <AssemblyName>TCPClientTest</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -47,9 +47,9 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SQLConnect\MySQLConnect.csproj">
+    <ProjectReference Include="..\SQLConnect\MySQLConnectTest.csproj">
       <Project>{f3225c7c-0431-48d9-9f5d-7379f1012207}</Project>
-      <Name>MySQLConnect</Name>
+      <Name>MySQLConnectTest</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

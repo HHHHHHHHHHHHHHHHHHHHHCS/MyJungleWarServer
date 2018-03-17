@@ -4,7 +4,7 @@ using System.Text;
 using MySql.Data.MySqlClient;
 using System.Data.SqlClient;
 
-namespace MySQLConnect
+namespace MySQLConnectTest
 {
     public class Main
     {
