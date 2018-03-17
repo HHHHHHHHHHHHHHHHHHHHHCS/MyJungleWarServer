@@ -36,7 +36,7 @@ namespace MyJungleWarServer.Controller
             MethodInfo methodInfo = baseController.GetType().GetMethod(methodName);
             if (methodInfo == null)
             {
-                Console.WriteLine("[警告]在Controller[" + baseController + "]中没有对应的方法:[" + methodName + "]");
+                Console.WriteLine("[警告]在Controller[" + baseController.GetType() + "]中没有对应的方法:[" + methodName + "]");
                 return;
             }
             object result = methodInfo.Invoke(baseController, new object[] { data });

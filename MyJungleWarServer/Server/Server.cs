@@ -13,7 +13,7 @@ namespace MyJungleWarServer.Server
     {
         private IPEndPoint ipEndPoint;
         private Socket serverSocket;
-        private HashSet<Client> clientHashSet;
+        private HashSet<Client> clientHashSet = new HashSet<Client>();
         private ControllerManager controllerManager = new ControllerManager();
 
         public Server()

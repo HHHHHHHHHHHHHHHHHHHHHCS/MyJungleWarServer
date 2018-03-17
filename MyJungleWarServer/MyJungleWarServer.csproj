@@ -39,23 +39,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Server.cs" />
+    <Compile Include="Controller\BaseController.cs" />
+    <Compile Include="Controller\ControllerManager.cs" />
+    <Compile Include="Controller\DefaultController.cs" />
+    <Compile Include="Main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server\Client.cs" />
+    <Compile Include="Server\Message.cs" />
+    <Compile Include="Server\Server.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SQLConnect\MySQLConnect.csproj">
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{d03ed637-3ee2-4041-9c14-7e0fad39c864}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLConnect\MySQLConnectTest.csproj">
       <Project>{f3225c7c-0431-48d9-9f5d-7379f1012207}</Project>
       <Name>MySQLConnect</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controller\" />
     <Folder Include="Dao\" />
     <Folder Include="Model\" />
-    <Folder Include="Server\" />
     <Folder Include="Tool\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
