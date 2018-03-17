@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
+using MyJungleWarServer.Controller;
 
 namespace MyJungleWarServer.Server
 {
@@ -13,6 +14,7 @@ namespace MyJungleWarServer.Server
         private IPEndPoint ipEndPoint;
         private Socket serverSocket;
         private HashSet<Client> clientHashSet;
+        private ControllerManager controllerManager = new ControllerManager();
 
         public Server()
         {
