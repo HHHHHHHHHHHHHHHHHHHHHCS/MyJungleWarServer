@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
+using MyJungleWarServer.Servers;
 
 namespace MyJungleWarServer.Controller
 {
@@ -20,7 +21,7 @@ namespace MyJungleWarServer.Controller
         }
 
 
-        public virtual string DefaultHandle(string data)
+        public virtual string DefaultHandle(string data,Client client, Server server)
         {
             return null;
         }

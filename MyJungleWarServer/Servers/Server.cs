@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Sockets;
 using MyJungleWarServer.Controller;
+using Common;
 
-namespace MyJungleWarServer.Server
+namespace MyJungleWarServer.Servers
 {
     public class Server
     {
         private IPEndPoint ipEndPoint;
         private Socket serverSocket;
         private HashSet<Client> clientHashSet = new HashSet<Client>();
-        private ControllerManager controllerManager = new ControllerManager();
+        private ControllerManager controllerManager;
 
         public Server()
         {
@@ -23,6 +24,7 @@ namespace MyJungleWarServer.Server
 
         public Server(string ipStr, int port)
         {
+            controllerManager = new ControllerManager(this);
             SetIPAndPort(ipStr, port);
         }
 
@@ -50,11 +52,15 @@ namespace MyJungleWarServer.Server
 
         public void RemoveClient(Client client)
         {
-            lock(clientHashSet)
+            lock (clientHashSet)
             {
                 clientHashSet.Remove(client);
             }
+        }
 
+        public void SendRespone(Client client,RequestCode requestCode,string data)
+        {
+            //TODO:
         }
     }
 }
