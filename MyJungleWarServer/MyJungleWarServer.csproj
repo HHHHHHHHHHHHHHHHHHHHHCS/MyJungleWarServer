@@ -34,6 +34,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MySql.Data">
+      <HintPath>..\Dll\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -47,21 +50,17 @@
     <Compile Include="Servers\Client.cs" />
     <Compile Include="Servers\Message.cs" />
     <Compile Include="Servers\Server.cs" />
+    <Compile Include="Tool\ConnHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
       <Project>{d03ed637-3ee2-4041-9c14-7e0fad39c864}</Project>
       <Name>Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SQLConnect\MySQLConnectTest.csproj">
-      <Project>{f3225c7c-0431-48d9-9f5d-7379f1012207}</Project>
-      <Name>MySQLConnect</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Dao\" />
     <Folder Include="Model\" />
-    <Folder Include="Tool\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
