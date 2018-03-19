@@ -58,9 +58,15 @@ namespace MyJungleWarServer.Servers
             }
         }
 
-        public void SendRespone(Client client,RequestCode requestCode,string data)
+        public void SendRespone(Client client, RequestCode requestCode, string data)
         {
-            //TODO:
+            client.Send(requestCode, data);
+        }
+
+        public void HandleRequest(RequestCode requestCode, ActionCode actionCode
+            , string data, Client client)
+        {
+            controllerManager.HandleRequest(requestCode, actionCode, data, client);
         }
     }
 }

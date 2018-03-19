@@ -37,6 +37,7 @@ namespace MyJungleWarServer.Controller
                 return;
             }
 
+            //todo:这里用的是反射 ，要改
             string methodName = Enum.GetName(typeof(ActionCode), actionCode);
             MethodInfo methodInfo = baseController.GetType().GetMethod(methodName);
             if (methodInfo == null)

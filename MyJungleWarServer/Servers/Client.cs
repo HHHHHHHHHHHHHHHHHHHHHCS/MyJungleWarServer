@@ -1,9 +1,12 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+using MyJungleWarServer.Tool;
 
 namespace MyJungleWarServer.Servers
 {
@@ -11,7 +14,8 @@ namespace MyJungleWarServer.Servers
     {
         private Socket clientSocket;
         private Server server;
-        private Message msg = new Message();
+        private MySqlConnection sqlConn;
+        private Message msg;
 
         public Client()
         {
@@ -22,6 +26,8 @@ namespace MyJungleWarServer.Servers
         {
             clientSocket = _clientSocket;
             server = _server;
+            msg = new Message();
+            sqlConn = ConnHelper.Connect();
         }
 
         public void Start()
@@ -41,7 +47,7 @@ namespace MyJungleWarServer.Servers
                 else
                 {
                     //处理接收到的数据
-                    msg.GetOneContent(count);
+                    msg.GetOneContent(count, OnProcessMessage);
                     Start();
                 }
             }
@@ -52,12 +58,25 @@ namespace MyJungleWarServer.Servers
             }
         }
 
+        private void OnProcessMessage(RequestCode requestCode, ActionCode actionCode, string data)
+        {
+            server.HandleRequest(requestCode, actionCode, data, this);
+        }
+
+        public void Send(RequestCode requestCode,string data)
+        {
+            byte[] bytes = Message.PackData(requestCode, data);
+            clientSocket.Send(bytes);
+        }
+
         public void Close()
         {
+            ConnHelper.Close(sqlConn);
             if (clientSocket != null)
             {
                 clientSocket.Close();
             }
+            server.RemoveClient(this);
         }
     }
 }
