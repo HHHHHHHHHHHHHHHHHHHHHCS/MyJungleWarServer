@@ -5,13 +5,13 @@ VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyJungleWarServer", "MyJungleWarServer\MyJungleWarServer.csproj", "{C59AACC7-4760-42D8-912A-E8424A48033D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{D03ED637-3EE2-4041-9C14-7E0FAD39C864}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerTest", "ServerTest\ServerTest.csproj", "{548F5C20-9691-40A7-ADB8-CAC9AD24C30A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MySQLConnectTest", "SQLConnect\MySQLConnectTest.csproj", "{F3225C7C-0431-48D9-9F5D-7379F1012207}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCPClientTest", "TCPClient\TCPClientTest.csproj", "{BF3DC00E-B12D-424F-A5A2-2D5D93660973}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{B814CA62-C632-4CFF-A082-05BEF04E9B30}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,6 @@ Global
 		{C59AACC7-4760-42D8-912A-E8424A48033D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C59AACC7-4760-42D8-912A-E8424A48033D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C59AACC7-4760-42D8-912A-E8424A48033D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D03ED637-3EE2-4041-9C14-7E0FAD39C864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D03ED637-3EE2-4041-9C14-7E0FAD39C864}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D03ED637-3EE2-4041-9C14-7E0FAD39C864}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D03ED637-3EE2-4041-9C14-7E0FAD39C864}.Release|Any CPU.Build.0 = Release|Any CPU
 		{548F5C20-9691-40A7-ADB8-CAC9AD24C30A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{548F5C20-9691-40A7-ADB8-CAC9AD24C30A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{548F5C20-9691-40A7-ADB8-CAC9AD24C30A}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +35,10 @@ Global
 		{BF3DC00E-B12D-424F-A5A2-2D5D93660973}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF3DC00E-B12D-424F-A5A2-2D5D93660973}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF3DC00E-B12D-424F-A5A2-2D5D93660973}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B814CA62-C632-4CFF-A082-05BEF04E9B30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B814CA62-C632-4CFF-A082-05BEF04E9B30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B814CA62-C632-4CFF-A082-05BEF04E9B30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B814CA62-C632-4CFF-A082-05BEF04E9B30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
