@@ -46,7 +46,7 @@ namespace MyJungleWarServer.Controller
                 return;
             }
             object result = methodInfo.Invoke(baseController, new object[] { data,client,server });
-            server.SendRespone(client, requestCode, result as string);
+            server.SendRespone(client, actionCode, result as string);
         }
     }
 }
