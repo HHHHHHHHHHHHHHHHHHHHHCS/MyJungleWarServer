@@ -10,7 +10,7 @@ namespace MyJungleWarServer.Controller
 {
     public abstract class BaseController
     {
-        RequestCode requestCode = RequestCode.None;
+        protected RequestCode requestCode = RequestCode.None;
 
         public RequestCode RequestCode
         {

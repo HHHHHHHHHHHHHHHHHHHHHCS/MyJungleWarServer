@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace MyJungleWarServer.Controller
 {
-    public class DefaultController : BaseController
+    public class UserController : BaseController
     {
-        public DefaultController()
+        public UserController()
         {
-            requestCode = RequestCode.None;
+            requestCode = RequestCode.User;
         }
     }
 }

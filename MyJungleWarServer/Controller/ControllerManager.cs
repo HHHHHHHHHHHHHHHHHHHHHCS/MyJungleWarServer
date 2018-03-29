@@ -25,6 +25,8 @@ namespace MyJungleWarServer.Controller
         {
             DefaultController defaultController = new DefaultController();
             controllerDic.Add(defaultController.RequestCode, defaultController);
+            DefaultController defaultController = new user();
+            controllerDic.Add(defaultController.RequestCode, defaultController);
         }
 
         public void HandleRequest(RequestCode requestCode, ActionCode actionCode
