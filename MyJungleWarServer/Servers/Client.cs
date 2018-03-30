@@ -14,8 +14,9 @@ namespace MyJungleWarServer.Servers
     {
         private Socket clientSocket;
         private Server server;
-        private MySqlConnection sqlConn;
         private Message msg;
+
+        public MySqlConnection SQLConn { get; private set; };
 
         public Client()
         {
@@ -27,7 +28,7 @@ namespace MyJungleWarServer.Servers
             clientSocket = _clientSocket;
             server = _server;
             msg = new Message();
-            sqlConn = ConnHelper.Connect();
+            SQLConn = ConnHelper.Connect();
         }
 
         public void Start()
@@ -71,7 +72,7 @@ namespace MyJungleWarServer.Servers
 
         public void Close()
         {
-            ConnHelper.Close(sqlConn);
+            ConnHelper.Close(SQLConn);
             if (clientSocket != null)
             {
                 clientSocket.Close();
