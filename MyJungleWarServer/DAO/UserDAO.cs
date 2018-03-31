@@ -9,7 +9,7 @@ namespace MyJungleWarServer.DAO
 {
     public class UserDAO
     {
-        private const string verifyUserSQL = @"select * from user where username= @username and passowrod = @password";
+        private const string verifyUserSQL = @"select * from user where username= @username and password = @password";
 
         public Model.User VerifyUser(MySqlConnection conn, string username
             , string password)

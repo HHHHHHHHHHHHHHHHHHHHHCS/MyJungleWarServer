@@ -93,11 +93,11 @@ namespace MyJungleWarServer.Servers
 
         public static byte[] PackData(ActionCode actionCode,string data)
         {
-            byte[] requestCodeBytes = BitConverter.GetBytes((int)actionCode);
+            byte[] actionCodeBytes = BitConverter.GetBytes((int)actionCode);
             byte[] dataBytes = Encoding.UTF8.GetBytes(data);
-            int dataAmount = requestCodeBytes.Length + dataBytes.Length;
+            int dataAmount = actionCodeBytes.Length + dataBytes.Length;
             byte[] dataAmountBytes = BitConverter.GetBytes(dataAmount);
-            return dataAmountBytes.Concat(requestCodeBytes).Concat(dataBytes).ToArray();
+            return dataAmountBytes.Concat(actionCodeBytes).Concat(dataBytes).ToArray();
         }
     }
 }

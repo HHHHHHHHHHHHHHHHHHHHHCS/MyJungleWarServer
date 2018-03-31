@@ -7,6 +7,8 @@ using System.Net;
 using System.Net.Sockets;
 using MyJungleWarServer.Controller;
 using Common;
+using MyJungleWarServer.Tool;
+using MySql.Data.MySqlClient;
 
 namespace MyJungleWarServer.Servers
 {
@@ -16,10 +18,11 @@ namespace MyJungleWarServer.Servers
         private Socket serverSocket;
         private HashSet<Client> clientHashSet = new HashSet<Client>();
         private ControllerManager controllerManager;
+        private MySqlConnection sqlConn;
 
         public Server()
         {
-
+            
         }
 
         public Server(string ipStr, int port)
@@ -35,6 +38,7 @@ namespace MyJungleWarServer.Servers
 
         public void Start()
         {
+            sqlConn= ConnHelper.Connect(); 
             serverSocket = new Socket(AddressFamily.InterNetwork
                 , SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(ipEndPoint);
@@ -45,9 +49,10 @@ namespace MyJungleWarServer.Servers
         private void AcceptCallBack(IAsyncResult ar)
         {
             Socket clientSocket = serverSocket.EndAccept(ar);
-            Client client = new Client(clientSocket, this);
+            Client client = new Client(clientSocket, this, sqlConn);
             client.Start();
             clientHashSet.Add(client);
+            serverSocket.BeginAccept(AcceptCallBack, null);
         }
 
         public void RemoveClient(Client client)
@@ -67,6 +72,12 @@ namespace MyJungleWarServer.Servers
             , string data, Client client)
         {
             controllerManager.HandleRequest(requestCode, actionCode, data, client);
+        }
+
+        public void Close()
+        {
+            sqlConn.Close();
+            serverSocket.Close();
         }
     }
 }

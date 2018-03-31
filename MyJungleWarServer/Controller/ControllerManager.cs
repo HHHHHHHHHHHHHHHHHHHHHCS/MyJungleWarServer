@@ -25,30 +25,32 @@ namespace MyJungleWarServer.Controller
         {
             DefaultController defaultController = new DefaultController();
             controllerDic.Add(defaultController.RequestCode, defaultController);
-            DefaultController defaultController = new user();
-            controllerDic.Add(defaultController.RequestCode, defaultController);
+            UserController userController = new UserController();
+            controllerDic.Add(userController.RequestCode, userController);
         }
 
         public void HandleRequest(RequestCode requestCode, ActionCode actionCode
             , string data,Client client)
         {
             var isGet = controllerDic.TryGetValue(requestCode, out BaseController baseController);
-            if (isGet)
+            if (!isGet)
             {
                 Console.WriteLine("无法得到[" + requestCode + "]所对应的Controller，无法处理请求！");
                 return;
             }
 
-            //todo:这里用的是反射 ，要改
-            string methodName = Enum.GetName(typeof(ActionCode), actionCode);
-            MethodInfo methodInfo = baseController.GetType().GetMethod(methodName);
-            if (methodInfo == null)
-            {
-                Console.WriteLine("[警告]在Controller[" + baseController.GetType() + "]中没有对应的方法:[" + methodName + "]");
-                return;
-            }
-            object result = methodInfo.Invoke(baseController, new object[] { data,client,server });
-            server.SendRespone(client, actionCode, result as string);
+            //这里用的是反射 ，要改
+            //string methodName = Enum.GetName(typeof(ActionCode), actionCode);
+            //MethodInfo methodInfo = baseController.GetType().GetMethod(methodName);
+            //if (methodInfo == null)
+            //{
+            //    Console.WriteLine("[警告]在Controller[" + baseController.GetType() + "]中没有对应的方法:[" + methodName + "]");
+            //    return;
+            //}
+            //object result = methodInfo.Invoke(baseController, new object[] { data,client,server });
+
+            string result = baseController.HandleByActionCode(actionCode, data, client, server);
+            server.SendRespone(client, actionCode, result);
         }
     }
 }

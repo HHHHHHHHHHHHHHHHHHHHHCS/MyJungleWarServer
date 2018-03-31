@@ -12,6 +12,10 @@ namespace MyJungleWarServer
         {
             Servers.Server server = new Servers.Server("127.0.0.1", 2333);
             server.Start();
+            while(Console.ReadLine()!="-q")
+            {
+                server.Close();
+            }
         }
     }
 }

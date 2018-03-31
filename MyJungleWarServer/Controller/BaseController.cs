@@ -20,6 +20,10 @@ namespace MyJungleWarServer.Controller
             }
         }
 
+        public virtual string HandleByActionCode(ActionCode code, string data, Client client, Server server )
+        {
+            return null;
+        }
 
         public virtual string DefaultHandle(string data,Client client, Server server)
         {

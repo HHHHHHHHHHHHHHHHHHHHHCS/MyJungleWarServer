@@ -18,6 +18,20 @@ namespace MyJungleWarServer.Controller
             requestCode = RequestCode.User;
         }
 
+        public override string HandleByActionCode(ActionCode code, string data, Client client, Server server)
+        {
+            string result = null;
+            switch (code)
+            {
+                case ActionCode.Login:
+                    result = Login(data, client, server);
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+
         public string Login(string data,Client client,Server server)
         {
             string[] strs = data.Split(',');

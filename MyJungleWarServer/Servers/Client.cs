@@ -16,19 +16,19 @@ namespace MyJungleWarServer.Servers
         private Server server;
         private Message msg;
 
-        public MySqlConnection SQLConn { get; private set; };
+        public MySqlConnection SQLConn { get; private set; }
 
         public Client()
         {
 
         }
 
-        public Client(Socket _clientSocket, Server _server)
+        public Client(Socket _clientSocket, Server _server, MySqlConnection _conn)
         {
             clientSocket = _clientSocket;
             server = _server;
             msg = new Message();
-            SQLConn = ConnHelper.Connect();
+            SQLConn = _conn;
         }
 
         public void Start()
