@@ -8,5 +8,7 @@ namespace Common
     {
         None,
         Login,
+        Register,
+
     }
 }
