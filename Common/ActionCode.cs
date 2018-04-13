@@ -10,5 +10,8 @@ namespace Common
         Login,
         Register,
 
+
+        UserData_Create,
+        UserData_Get,
     }
 }

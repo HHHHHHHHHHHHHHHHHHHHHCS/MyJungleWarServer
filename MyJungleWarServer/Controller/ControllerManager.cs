@@ -11,12 +11,15 @@ namespace MyJungleWarServer.Controller
 {
     public class ControllerManager
     {
+        internal static ControllerManager Instance;
+
         private Dictionary<RequestCode, BaseController> controllerDic =
             new Dictionary<RequestCode, BaseController>();
         private Server server;
 
         public ControllerManager(Server _server)
         {
+            Instance = this;
             server = _server;
             InitController();
         }
@@ -27,30 +30,30 @@ namespace MyJungleWarServer.Controller
             controllerDic.Add(defaultController.RequestCode, defaultController);
             UserController userController = new UserController();
             controllerDic.Add(userController.RequestCode, userController);
+            UserDataController userDataController = new UserDataController();
+            controllerDic.Add(userDataController.RequestCode, userDataController);
+        }
+
+        public T GetControllser<T>(RequestCode requestCode) where T: BaseController
+        {
+            controllerDic.TryGetValue(requestCode, out BaseController baseController);
+            if (baseController==null)
+            {
+                Console.WriteLine("无法得到[" + requestCode + "]所对应的Controller，无法处理请求！");
+                return null;
+            }
+            return (T)baseController;
         }
 
         public void HandleRequest(RequestCode requestCode, ActionCode actionCode
             , string data,Client client)
         {
-            var isGet = controllerDic.TryGetValue(requestCode, out BaseController baseController);
-            if (!isGet)
+            var baseController = GetControllser<BaseController>(requestCode);
+            if(baseController!=null)
             {
-                Console.WriteLine("无法得到[" + requestCode + "]所对应的Controller，无法处理请求！");
-                return;
+                string result = baseController.HandleByActionCode(actionCode, data, client, server);
+                server.SendRespone(client, actionCode, result);
             }
-
-            //这里用的是反射 ，要改
-            //string methodName = Enum.GetName(typeof(ActionCode), actionCode);
-            //MethodInfo methodInfo = baseController.GetType().GetMethod(methodName);
-            //if (methodInfo == null)
-            //{
-            //    Console.WriteLine("[警告]在Controller[" + baseController.GetType() + "]中没有对应的方法:[" + methodName + "]");
-            //    return;
-            //}
-            //object result = methodInfo.Invoke(baseController, new object[] { data,client,server });
-
-            string result = baseController.HandleByActionCode(actionCode, data, client, server);
-            server.SendRespone(client, actionCode, result);
         }
     }
 }

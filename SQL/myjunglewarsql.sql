@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-03-26 05:21:56
+-- Generation Time: 2018-04-13 09:10:21
 -- 服务器版本： 10.1.24-MariaDB
 -- PHP Version: 7.1.6
 
@@ -39,10 +39,12 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`) VALUES
-(1, 'aaa', 'aaa'),
-(2, 'bbb', 'bbb'),
-(3, 'ccc', 'ccc'),
-(4, 'ddd', 'ddd');
+(17, 'aaa', 'aaa'),
+(16, 'eee', 'eee'),
+(14, 'qqq', 'qqq'),
+(18, 'sss', 'sss'),
+(15, 'www', 'www'),
+(19, 'zzz', 'zzz');
 
 -- --------------------------------------------------------
 
@@ -52,9 +54,21 @@ INSERT INTO `user` (`id`, `username`, `password`) VALUES
 
 CREATE TABLE `userdata` (
   `username` varchar(20) NOT NULL,
-  `totalcount` int(11) NOT NULL,
-  `wincount` int(11) NOT NULL
+  `totalcount` int(11) NOT NULL DEFAULT '0',
+  `wincount` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- 转存表中的数据 `userdata`
+--
+
+INSERT INTO `userdata` (`username`, `totalcount`, `wincount`) VALUES
+('aaa', 0, 0),
+('eee', 0, 0),
+('qqq', 0, 0),
+('sss', 0, 0),
+('www', 0, 0),
+('zzz', 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -82,7 +96,7 @@ ALTER TABLE `userdata`
 -- 使用表AUTO_INCREMENT `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- 限制导出的表
 --

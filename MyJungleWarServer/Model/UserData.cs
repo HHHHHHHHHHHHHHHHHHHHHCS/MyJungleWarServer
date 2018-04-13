@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace MyJungleWarServer.Model
 {
     [Serializable]
-    public class User
+    public class UserData
     {
-        public int Id { get; set; }
         public string Username { get; set; }
-        public string Password { get; set; }
+        public int TotalCount { get; set; }
+        public int WinCount { get; set; }
 
-        public User(int _id, string _username, string _password)
+        public UserData(string _username, int _totalCount, int _winCount)
         {
-            Id = _id;
             Username = _username;
-            Password = _password;
+            TotalCount = _totalCount;
+            WinCount = _winCount;
         }
     }
 }
