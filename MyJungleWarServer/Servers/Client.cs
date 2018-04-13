@@ -33,6 +33,10 @@ namespace MyJungleWarServer.Servers
 
         public void Start()
         {
+            if(clientSocket==null||!clientSocket.Connected)
+            {
+                return;
+            }
             clientSocket.BeginReceive(msg.Data, msg.StartIndex, msg.RemainIndex, SocketFlags.None, ReceiveCallback, null);
         }
 
@@ -72,7 +76,6 @@ namespace MyJungleWarServer.Servers
 
         public void Close()
         {
-            ConnHelper.Close(SQLConn);
             if (clientSocket != null)
             {
                 clientSocket.Close();
