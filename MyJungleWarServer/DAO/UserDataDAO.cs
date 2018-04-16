@@ -37,16 +37,16 @@ namespace MyJungleWarServer.DAO
             Model.UserData userdata = null;
             try
             {
-
                 MySqlCommand cmd = new MySqlCommand(getUserData, conn);
                 cmd.Parameters.AddWithValue("@username", _username);
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     if (reader.HasRows)
                     {
+                        reader.Read();
                         string username =  reader.GetString("username");
-                        Int32 totalCount = reader.GetInt32("totalCount");
-                        Int32 winCount = reader.GetInt32("winCount");
+                        Int32 totalCount = reader.GetInt16("totalcount");
+                        Int32 winCount = reader.GetInt16("wincount");
                          userdata = new Model.UserData(username, totalCount, winCount);
                     }
                     reader.Close();

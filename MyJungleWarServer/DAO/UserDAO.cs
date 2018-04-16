@@ -25,8 +25,9 @@ namespace MyJungleWarServer.DAO
                 cmd.Parameters.AddWithValue("@password", _password);
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
-                    if (reader.Read())
+                    if (reader.HasRows)
                     {
+                        reader.Read();
                         int id = reader.GetInt32("id");
                         string username = reader.GetString("username");
                         string password = reader.GetString("password");

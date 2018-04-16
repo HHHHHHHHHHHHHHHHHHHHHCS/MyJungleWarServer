@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-04-13 09:10:21
+-- Generation Time: 2018-04-16 05:53:08
 -- 服务器版本： 10.1.24-MariaDB
 -- PHP Version: 7.1.6
 
@@ -54,8 +54,8 @@ INSERT INTO `user` (`id`, `username`, `password`) VALUES
 
 CREATE TABLE `userdata` (
   `username` varchar(20) NOT NULL,
-  `totalcount` int(11) NOT NULL DEFAULT '0',
-  `wincount` int(11) NOT NULL DEFAULT '0'
+  `totalcount` int(16) NOT NULL DEFAULT '0',
+  `wincount` int(16) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -63,11 +63,11 @@ CREATE TABLE `userdata` (
 --
 
 INSERT INTO `userdata` (`username`, `totalcount`, `wincount`) VALUES
-('aaa', 0, 0),
-('eee', 0, 0),
-('qqq', 0, 0),
-('sss', 0, 0),
-('www', 0, 0),
+('aaa', 10, 5),
+('eee', 8, 4),
+('qqq', 6, 3),
+('sss', 4, 2),
+('www', 2, 1),
 ('zzz', 0, 0);
 
 --
