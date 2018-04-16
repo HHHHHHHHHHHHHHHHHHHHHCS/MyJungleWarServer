@@ -9,6 +9,7 @@ using MyJungleWarServer.Controller;
 using Common;
 using MyJungleWarServer.Tool;
 using MySql.Data.MySqlClient;
+using MyJungleWarServer.Module;
 
 namespace MyJungleWarServer.Servers
 {
@@ -17,6 +18,7 @@ namespace MyJungleWarServer.Servers
         private IPEndPoint ipEndPoint;
         private Socket serverSocket;
         private HashSet<Client> clientHashSet = new HashSet<Client>();
+        private ClientRoom clientRoom = new ClientRoom();
         private ControllerManager controllerManager;
         private MySqlConnection sqlConn;
 
