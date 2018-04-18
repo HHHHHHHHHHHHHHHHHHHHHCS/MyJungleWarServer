@@ -36,10 +36,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionCode.cs" />
+    <Compile Include="Code\ActionCode.cs" />
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Model\UserData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestCode.cs" />
-    <Compile Include="ReturnCode.cs" />
+    <Compile Include="Code\RequestCode.cs" />
+    <Compile Include="Code\ReturnCode.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

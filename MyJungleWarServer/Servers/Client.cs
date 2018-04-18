@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using MyJungleWarServer.Tool;
+using Common.Code;
+using Common.Model;
 
 namespace MyJungleWarServer.Servers
 {
@@ -15,8 +17,11 @@ namespace MyJungleWarServer.Servers
         private Socket clientSocket;
         private Server server;
         private Message msg;
+        private string username;
 
         public MySqlConnection SQLConn { get; private set; }
+        public string GetUsername { get { return username; } }
+
 
         public Client()
         {
@@ -81,6 +86,12 @@ namespace MyJungleWarServer.Servers
                 clientSocket.Close();
             }
             server.RemoveClient(this);
+            server.ClientRoomList.CloseRoom(this);
+        }
+
+        public void SetUsername(string _username)
+        {
+            username = _username;
         }
     }
 }

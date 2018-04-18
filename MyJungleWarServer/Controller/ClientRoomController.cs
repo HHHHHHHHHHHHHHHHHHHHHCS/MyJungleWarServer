@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyJungleWarServer.Servers;
+using Common.Code;
 
 namespace MyJungleWarServer.Controller
 {
@@ -27,6 +28,7 @@ namespace MyJungleWarServer.Controller
                 case ActionCode.ClientRoom_Show:
                     break;
                 case ActionCode.ClientRoom_Create:
+                    result = CreateRoom(data, client, server);
                     break;
                 case ActionCode.ClientRoom_Join:
                     break;
@@ -36,6 +38,23 @@ namespace MyJungleWarServer.Controller
                     break;
                 default:
                     break;
+            }
+            return result;
+        }
+
+        public string CreateRoom(string data, Client client, Server server)
+        {
+            string result;
+            bool isSucceed = server.ClientRoomList.CreateRoom(client);
+            if (isSucceed)
+            {
+                string str = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
+                 .UserData_Get(client.GetUsername, client, server);
+                result = string.Format("{0},{1}", (int)(isSucceed ? ReturnCode.Success : ReturnCode.Fail), str);
+            }
+            else
+            {
+                result = string.Format("{0}", (int)(isSucceed ? ReturnCode.Success : ReturnCode.Fail));
             }
             return result;
         }

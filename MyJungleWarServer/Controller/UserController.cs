@@ -1,4 +1,5 @@
 ﻿using Common;
+using Common.Code;
 using MyJungleWarServer.DAO;
 using MyJungleWarServer.Model;
 using MyJungleWarServer.Servers;
@@ -51,6 +52,7 @@ namespace MyJungleWarServer.Controller
                 var userdata =  ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
                     .UserData_Get(strs[0], client, server);
                 result = string.Format("{0},{1}", (int)ReturnCode.Success, userdata);
+                client.SetUsername(strs[0]);
             }
             return result;
         }
