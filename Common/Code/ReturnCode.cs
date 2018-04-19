@@ -7,7 +7,7 @@ namespace Common.Code
 {
     public enum ReturnCode
     {
-        Success,
-        Fail
+        Success,//成功
+        Fail,//失败
     }
 }

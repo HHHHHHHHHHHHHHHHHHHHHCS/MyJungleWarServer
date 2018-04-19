@@ -38,7 +38,7 @@ namespace MyJungleWarServer.Servers
 
         public void Start()
         {
-            if(clientSocket==null||!clientSocket.Connected)
+            if (clientSocket == null || !clientSocket.Connected)
             {
                 return;
             }
@@ -49,6 +49,10 @@ namespace MyJungleWarServer.Servers
         {
             try
             {
+                if (clientSocket == null || !clientSocket.Connected || ar == null)
+                {
+                    return;
+                }
                 int count = clientSocket.EndReceive(ar);
                 if (count <= 0)
                 {
@@ -73,7 +77,7 @@ namespace MyJungleWarServer.Servers
             server.HandleRequest(requestCode, actionCode, data, this);
         }
 
-        public void Send(ActionCode actionCode,string data)
+        public void Send(ActionCode actionCode, string data)
         {
             byte[] bytes = Message.PackData(actionCode, data);
             clientSocket.Send(bytes);
@@ -87,6 +91,7 @@ namespace MyJungleWarServer.Servers
             }
             server.RemoveClient(this);
             server.ClientRoomList.CloseRoom(this);
+            server.ClientRoomList.LeaveRoom(this);
         }
 
         public void SetUsername(string _username)

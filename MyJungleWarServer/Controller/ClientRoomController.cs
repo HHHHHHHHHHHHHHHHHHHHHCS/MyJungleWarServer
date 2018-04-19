@@ -26,11 +26,13 @@ namespace MyJungleWarServer.Controller
             switch (code)
             {
                 case ActionCode.ClientRoom_Show:
+                    result = ShowRoomList(data, client, server);
                     break;
                 case ActionCode.ClientRoom_Create:
                     result = CreateRoom(data, client, server);
                     break;
                 case ActionCode.ClientRoom_Join:
+                    result = JoinRoom(data, client, server);
                     break;
                 case ActionCode.ClientRoom_Ready:
                     break;
@@ -40,6 +42,24 @@ namespace MyJungleWarServer.Controller
                     break;
             }
             return result;
+        }
+
+        public string ShowRoomList(string data, Client client, Server server)
+        {
+            StringBuilder sb = new StringBuilder();
+            var clientRoom = server.ClientRoomList.GetWaitJoinClientRoom();
+            var userData = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData);
+            string userDataStr;
+            foreach (var item in clientRoom)
+            {
+                userDataStr = userData.UserData_Get(item.HomeClient.GetUsername, client, server);
+                sb.Append(userDataStr).Append('|');
+            }
+            if (sb.Length > 0)
+            {
+                sb.Remove(sb.Length - 1, 1);
+            }
+            return sb.ToString();
         }
 
         public string CreateRoom(string data, Client client, Server server)
@@ -58,5 +78,24 @@ namespace MyJungleWarServer.Controller
             }
             return result;
         }
+
+        public string JoinRoom(string data, Client client, Server server)
+        {
+            string result = "";
+            var awayUserData = server.ClientRoomList.JoinRoom(data, client, server);
+
+            if (!string.IsNullOrEmpty(awayUserData))
+            {
+                string userDataStr = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
+                    .UserData_Get(data, client, server);
+                result = string.Format("{0},{1},{2}", (int)ReturnCode.Success, userDataStr, awayUserData);
+            }
+            else
+            {
+                result = ((int)ReturnCode.Fail).ToString();
+            }
+            return result;
+        }
+
     }
 }

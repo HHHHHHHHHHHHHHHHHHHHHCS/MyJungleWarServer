@@ -9,14 +9,21 @@ namespace MyJungleWarServer.Module.Room
 {
     public class ClientRoomList
     {
-
-
         private Dictionary<Client, ClientRoom> clientRoomDic = new Dictionary<Client, ClientRoom>();
 
-        
+        public List<ClientRoom> GetWaitJoinClientRoom()
+        {
+            return clientRoomDic.Values.ToList().FindAll(room => room.RoomState == ClientRoom.ClientRoomState.WaitingJoin);
+        }
+
+        public ClientRoom[] GetAllClientRoom()
+        {
+            return clientRoomDic.Values.ToArray();
+        }
+
         public bool CreateRoom(Client client)
         {
-            if(!clientRoomDic.ContainsKey(client))
+            if (!clientRoomDic.ContainsKey(client))
             {
                 clientRoomDic.Add(client, ClientRoom.CreateDefaultRoom(client));
                 return true;
@@ -26,15 +33,36 @@ namespace MyJungleWarServer.Module.Room
 
         public void CloseRoom(Client client)
         {
-            if (clientRoomDic.ContainsKey(client))
+            clientRoomDic.TryGetValue(client, out ClientRoom room);
+            if (room!=null)
             {
+                room.CloseRoom();
                 clientRoomDic.Remove(client);
             }
         }
 
+        public void LeaveRoom(Client client)
+        {
+            var clientRoom= clientRoomDic.Values.ToList().Find(p => p.AwayClient == client);
+            if(clientRoom!=null)
+            {
+                clientRoom.LeaveRoom();
+            }
+        }
+
+        public string JoinRoom(string username,Client client,Server server)
+        {
+            var clientRoom = clientRoomDic.Values.ToList().Find(p => p.HomeClient.GetUsername == username);
+            if (clientRoom != null)
+            {
+                return clientRoom.JoinRoom(client,server);
+            }
+            return "";
+        }
+
         public void CloseAllRoom(HashSet<Client> clientList)
         {
-            while(clientRoomDic.Count>0)
+            while (clientRoomDic.Count > 0)
             {
                 CloseRoom(clientRoomDic.ElementAt(0).Key);
             }
