@@ -40,6 +40,7 @@ namespace MyJungleWarServer.Servers
         {
             if (clientSocket == null || !clientSocket.Connected)
             {
+                Close();
                 return;
             }
             clientSocket.BeginReceive(msg.Data, msg.StartIndex, msg.RemainIndex, SocketFlags.None, ReceiveCallback, null);
@@ -51,6 +52,7 @@ namespace MyJungleWarServer.Servers
             {
                 if (clientSocket == null || !clientSocket.Connected || ar == null)
                 {
+                    Close();
                     return;
                 }
                 int count = clientSocket.EndReceive(ar);
@@ -90,7 +92,6 @@ namespace MyJungleWarServer.Servers
                 clientSocket.Close();
             }
             server.RemoveClient(this);
-            server.ClientRoomList.CloseRoom(this);
             server.ClientRoomList.LeaveRoom(this);
         }
 

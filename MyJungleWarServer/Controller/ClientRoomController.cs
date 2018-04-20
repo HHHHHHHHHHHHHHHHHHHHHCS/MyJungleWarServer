@@ -37,6 +37,7 @@ namespace MyJungleWarServer.Controller
                 case ActionCode.ClientRoom_Ready:
                     break;
                 case ActionCode.ClientRoom_Leavel:
+                    result = LeaveRoom(data, client, server);
                     break;
                 default:
                     break;
@@ -97,5 +98,12 @@ namespace MyJungleWarServer.Controller
             return result;
         }
 
+
+        public string LeaveRoom(string data, Client client, Server server)
+        {
+            string result = server.ClientRoomList.LeaveRoom(client)
+                ?((int)ReturnCode.Success).ToString():((int)ReturnCode.Fail).ToString();
+            return result;
+        }
     }
 }

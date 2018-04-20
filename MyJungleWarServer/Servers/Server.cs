@@ -64,11 +64,22 @@ namespace MyJungleWarServer.Servers
 
         private void AcceptCallBack(IAsyncResult ar)
         {
-            Socket clientSocket = serverSocket.EndAccept(ar);
-            Client client = new Client(clientSocket, this, sqlConn);
-            client.Start();
-            clientHashSet.Add(client);
-            serverSocket.BeginAccept(AcceptCallBack, null);
+            try
+            {
+                if (serverSocket == null)
+                {
+                    return;
+                }
+                Socket clientSocket = serverSocket.EndAccept(ar);
+                Client client = new Client(clientSocket, this, sqlConn);
+                client.Start();
+                clientHashSet.Add(client);
+                serverSocket.BeginAccept(AcceptCallBack, null);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("接受客户端错误：" + e);
+            }
         }
 
         public void RemoveClient(Client client)

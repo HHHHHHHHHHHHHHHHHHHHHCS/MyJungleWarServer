@@ -31,23 +31,25 @@ namespace MyJungleWarServer.Module.Room
             return false;
         }
 
-        public void CloseRoom(Client client)
+        public bool LeaveRoom(Client client)
         {
             clientRoomDic.TryGetValue(client, out ClientRoom room);
             if (room!=null)
             {
-                room.CloseRoom();
+                room.LeaveRoom(client);
                 clientRoomDic.Remove(client);
+                return true;
             }
-        }
-
-        public void LeaveRoom(Client client)
-        {
-            var clientRoom= clientRoomDic.Values.ToList().Find(p => p.AwayClient == client);
-            if(clientRoom!=null)
+            else
             {
-                clientRoom.LeaveRoom();
+                var clientRoom = clientRoomDic.Values.ToList().Find(p => p.AwayClient == client);
+                if (clientRoom != null)
+                {
+                    clientRoom.LeaveRoom(client);
+                    return true;
+                }
             }
+            return false;
         }
 
         public string JoinRoom(string username,Client client,Server server)
@@ -64,7 +66,7 @@ namespace MyJungleWarServer.Module.Room
         {
             while (clientRoomDic.Count > 0)
             {
-                CloseRoom(clientRoomDic.ElementAt(0).Key);
+                LeaveRoom(clientRoomDic.ElementAt(0).Key);
             }
         }
     }

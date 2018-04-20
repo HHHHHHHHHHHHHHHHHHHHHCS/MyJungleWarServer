@@ -50,7 +50,19 @@ namespace MyJungleWarServer.Module.Room
             return "";
         }
 
-        public void CloseRoom()
+        public void LeaveRoom(Client client)
+        {
+            if(HomeClient==client)
+            {
+                CloseRoom();
+            }
+            else if(AwayClient==client)
+            {
+                LeaveRoom();
+            }
+        }
+
+        private void CloseRoom()
         {
             //通知Home房间关闭
             //通知Away用户房间关闭
@@ -65,7 +77,7 @@ namespace MyJungleWarServer.Module.Room
             }
         }
 
-        public void LeaveRoom()
+        private void LeaveRoom()
         {
             //通知Home房间  Away离开了
             //通知清空Away

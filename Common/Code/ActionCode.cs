@@ -18,7 +18,6 @@ namespace Common.Code
         ClientRoom_Join,//客机加入
         ClientRoom_Come,//主机知道客机进入
         ClientRoom_Ready,//玩家准备
-        ClientRoom_Close,//主机关闭房间
-        ClientRoom_Leavel,//客机离开
+        ClientRoom_Leavel,//玩家离开
     }
 }
