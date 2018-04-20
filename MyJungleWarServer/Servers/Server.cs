@@ -48,7 +48,7 @@ namespace MyJungleWarServer.Servers
         {
             try
             {
-                ClientRoomList = new ClientRoomList();
+                ClientRoomList = new ClientRoomList(this);
                 sqlConn = ConnHelper.Connect();
                 serverSocket = new Socket(AddressFamily.InterNetwork
                     , SocketType.Stream, ProtocolType.Tcp);

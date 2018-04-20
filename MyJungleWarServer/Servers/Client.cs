@@ -91,8 +91,8 @@ namespace MyJungleWarServer.Servers
             {
                 clientSocket.Close();
             }
+            server.ClientRoomList.LeaveRoom(this,server);
             server.RemoveClient(this);
-            server.ClientRoomList.LeaveRoom(this);
         }
 
         public void SetUsername(string _username)

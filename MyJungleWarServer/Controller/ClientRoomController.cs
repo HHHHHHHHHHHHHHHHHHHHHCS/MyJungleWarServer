@@ -101,7 +101,7 @@ namespace MyJungleWarServer.Controller
 
         public string LeaveRoom(string data, Client client, Server server)
         {
-            string result = server.ClientRoomList.LeaveRoom(client)
+            string result = server.ClientRoomList.LeaveRoom(client,server)
                 ?((int)ReturnCode.Success).ToString():((int)ReturnCode.Fail).ToString();
             return result;
         }

@@ -10,6 +10,13 @@ namespace MyJungleWarServer.Module.Room
     public class ClientRoomList
     {
         private Dictionary<Client, ClientRoom> clientRoomDic = new Dictionary<Client, ClientRoom>();
+        private Server server;
+
+        public ClientRoomList(Server server)
+        {
+            this.server = server;
+        }
+
 
         public List<ClientRoom> GetWaitJoinClientRoom()
         {
@@ -31,12 +38,12 @@ namespace MyJungleWarServer.Module.Room
             return false;
         }
 
-        public bool LeaveRoom(Client client)
+        public bool LeaveRoom(Client client,Server server)
         {
             clientRoomDic.TryGetValue(client, out ClientRoom room);
             if (room!=null)
             {
-                room.LeaveRoom(client);
+                room.LeaveRoom(client, server);
                 clientRoomDic.Remove(client);
                 return true;
             }
@@ -45,7 +52,7 @@ namespace MyJungleWarServer.Module.Room
                 var clientRoom = clientRoomDic.Values.ToList().Find(p => p.AwayClient == client);
                 if (clientRoom != null)
                 {
-                    clientRoom.LeaveRoom(client);
+                    clientRoom.LeaveRoom(client, server);
                     return true;
                 }
             }
@@ -66,7 +73,7 @@ namespace MyJungleWarServer.Module.Room
         {
             while (clientRoomDic.Count > 0)
             {
-                LeaveRoom(clientRoomDic.ElementAt(0).Key);
+                LeaveRoom(clientRoomDic.ElementAt(0).Key,server);
             }
         }
     }

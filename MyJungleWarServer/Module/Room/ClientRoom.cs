@@ -41,31 +41,29 @@ namespace MyJungleWarServer.Module.Room
             RoomState = ClientRoomState.WaitingBattle;
             if (AwayClient == null)
             {
+                AwayClient = client;
                 var awayUserData = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
                     .UserData_Get(client.GetUsername, client, server);
                 server.SendRespone(HomeClient, ActionCode.ClientRoom_Come, awayUserData);
-                AwayClient = client;
                 return awayUserData;
             }
             return "";
         }
 
-        public void LeaveRoom(Client client)
+        public void LeaveRoom(Client client, Server server)
         {
-            if(HomeClient==client)
+            if (HomeClient == client)
             {
-                CloseRoom();
+                CloseRoom(server);
             }
-            else if(AwayClient==client)
+            else if (AwayClient == client)
             {
-                LeaveRoom();
+                LeaveRoom(server);
             }
         }
 
-        private void CloseRoom()
+        private void CloseRoom(Server server)
         {
-            //通知Home房间关闭
-            //通知Away用户房间关闭
             RoomState = ClientRoomState.None;
             if (HomeClient != null)
             {
@@ -73,17 +71,19 @@ namespace MyJungleWarServer.Module.Room
             }
             if (AwayClient != null)
             {
+                server.SendRespone(AwayClient, ActionCode.ClientRoom_Close
+                    , ((int)ReturnCode.Success).ToString());
                 AwayClient = null;
             }
         }
 
-        private void LeaveRoom()
+        private void LeaveRoom(Server server)
         {
-            //通知Home房间  Away离开了
-            //通知清空Away
             RoomState = ClientRoomState.WaitingJoin;
-            if (AwayClient != null)
+            if (HomeClient != null && AwayClient != null)
             {
+                server.SendRespone(HomeClient, ActionCode.ClientRoom_Quit
+                    , ((int)ReturnCode.Success).ToString());
                 AwayClient = null;
             }
         }
