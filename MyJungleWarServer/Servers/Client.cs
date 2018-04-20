@@ -50,11 +50,12 @@ namespace MyJungleWarServer.Servers
         {
             try
             {
-                if (clientSocket == null || !clientSocket.Connected || ar == null)
+                if (clientSocket == null || !clientSocket.Connected || !ar.IsCompleted)
                 {
                     Close();
                     return;
                 }
+                
                 int count = clientSocket.EndReceive(ar);
                 if (count <= 0)
                 {

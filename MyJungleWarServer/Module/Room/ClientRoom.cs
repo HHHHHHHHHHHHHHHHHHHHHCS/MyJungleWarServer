@@ -22,15 +22,19 @@ namespace MyJungleWarServer.Module.Room
 
         public ClientRoomState RoomState { get; private set; }
         public Client HomeClient { get; private set; }
-        //public HashSet<Client> ClientSet { get; private set; }//这里是一个1v1的用不到
-        public Client AwayClient { get; private set; }
+        public HashSet<Client> ClientSet { get; private set; }
+
+        private const int roomMaxCount = 2;
 
         public static ClientRoom CreateDefaultRoom(Client client)
         {
             ClientRoom room = new ClientRoom()
             {
-                HomeClient = client
-                ,
+                HomeClient = client,
+                ClientSet = new HashSet<Client>()
+                {
+                    client
+                },
                 RoomState = ClientRoomState.WaitingJoin
             };
             return room;
@@ -38,14 +42,20 @@ namespace MyJungleWarServer.Module.Room
 
         public string JoinRoom(Client client, Server server)
         {
-            RoomState = ClientRoomState.WaitingBattle;
-            if (AwayClient == null)
+            if (RoomState == ClientRoomState.WaitingJoin)
             {
-                AwayClient = client;
-                var awayUserData = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
-                    .UserData_Get(client.GetUsername, client, server);
-                server.SendRespone(HomeClient, ActionCode.ClientRoom_Come, awayUserData);
-                return awayUserData;
+                if (!ClientSet.Contains(client))
+                {
+                    ClientSet.Add(client);
+                    if (ClientSet.Count >= roomMaxCount)
+                    {
+                        RoomState = ClientRoomState.WaitingBattle;
+                    }
+                    var awayUserData = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
+                        .UserData_Get(client.GetUsername, client, server);
+                    BroadcastMessage(server, client, ActionCode.ClientRoom_Come, awayUserData);
+                    return awayUserData;
+                }
             }
             return "";
         }
@@ -54,37 +64,44 @@ namespace MyJungleWarServer.Module.Room
         {
             if (HomeClient == client)
             {
-                CloseRoom(server);
+                _CloseRoom(client, server);
             }
-            else if (AwayClient == client)
+            else
             {
-                LeaveRoom(server);
+                _LeaveRoom(client, server);
             }
         }
 
-        private void CloseRoom(Server server)
+        private void _CloseRoom(Client client, Server server)
         {
             RoomState = ClientRoomState.None;
             if (HomeClient != null)
             {
+                BroadcastMessage(server, HomeClient, ActionCode.ClientRoom_Close
+                , ((int)ReturnCode.Success).ToString());
                 HomeClient = null;
             }
-            if (AwayClient != null)
-            {
-                server.SendRespone(AwayClient, ActionCode.ClientRoom_Close
-                    , ((int)ReturnCode.Success).ToString());
-                AwayClient = null;
-            }
+            ClientSet = null;
         }
 
-        private void LeaveRoom(Server server)
+        private void _LeaveRoom(Client client, Server server)
         {
-            RoomState = ClientRoomState.WaitingJoin;
-            if (HomeClient != null && AwayClient != null)
+            ClientSet.Remove(client);
+            if (ClientSet.Count < roomMaxCount)
             {
-                server.SendRespone(HomeClient, ActionCode.ClientRoom_Quit
-                    , ((int)ReturnCode.Success).ToString());
-                AwayClient = null;
+                RoomState = ClientRoomState.WaitingJoin;
+            }
+            BroadcastMessage(server, client, ActionCode.ClientRoom_Quit, ((int)ReturnCode.Success).ToString());
+        }
+
+        public void BroadcastMessage(Server server, Client excludeClient, ActionCode actionCode, string data)
+        {
+            foreach (var item in ClientSet)
+            {
+                if (item != excludeClient)
+                {
+                    server.SendRespone(item, actionCode, data);
+                }
             }
         }
     }

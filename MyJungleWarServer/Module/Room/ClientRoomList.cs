@@ -9,18 +9,21 @@ namespace MyJungleWarServer.Module.Room
 {
     public class ClientRoomList
     {
-        private Dictionary<Client, ClientRoom> clientRoomDic = new Dictionary<Client, ClientRoom>();
         private Server server;
+        private Dictionary<Client, ClientRoom> clientRoomDic;
+        private HashSet<Client> waitClientSet;
 
         public ClientRoomList(Server server)
         {
             this.server = server;
+            clientRoomDic = new Dictionary<Client, ClientRoom>();
+            waitClientSet = new HashSet<Client>();
         }
-
 
         public List<ClientRoom> GetWaitJoinClientRoom()
         {
-            return clientRoomDic.Values.ToList().FindAll(room => room.RoomState == ClientRoom.ClientRoomState.WaitingJoin);
+            return clientRoomDic.Values
+                .Where(room => room.RoomState == ClientRoom.ClientRoomState.WaitingJoin).ToList();
         }
 
         public ClientRoom[] GetAllClientRoom()
@@ -38,42 +41,42 @@ namespace MyJungleWarServer.Module.Room
             return false;
         }
 
-        public bool LeaveRoom(Client client,Server server)
+        public bool LeaveRoom(Client client, Server server)
         {
-            clientRoomDic.TryGetValue(client, out ClientRoom room);
-            if (room!=null)
+            foreach (var item in clientRoomDic.Values)
             {
-                room.LeaveRoom(client, server);
-                clientRoomDic.Remove(client);
-                return true;
-            }
-            else
-            {
-                var clientRoom = clientRoomDic.Values.ToList().Find(p => p.AwayClient == client);
-                if (clientRoom != null)
+                if (item.HomeClient == client)
                 {
-                    clientRoom.LeaveRoom(client, server);
+                    item.LeaveRoom(client, server);
+                    clientRoomDic.Remove(client);
+                    return true;
+                }
+                if (item.ClientSet.Contains(client))
+                {
+                    item.LeaveRoom(client, server);
                     return true;
                 }
             }
             return false;
         }
 
-        public string JoinRoom(string username,Client client,Server server)
+        public string JoinRoom(string username, Client client, Server server)
         {
-            var clientRoom = clientRoomDic.Values.ToList().Find(p => p.HomeClient.GetUsername == username);
-            if (clientRoom != null)
+            foreach (var item in clientRoomDic.Values)
             {
-                return clientRoom.JoinRoom(client,server);
+                if (item.HomeClient.GetUsername == username)
+                {
+                    return item.JoinRoom(client, server);
+                }
             }
             return "";
         }
 
         public void CloseAllRoom(HashSet<Client> clientList)
         {
-            while (clientRoomDic.Count > 0)
+            foreach (var key in new List<Client>(clientRoomDic.Keys))
             {
-                LeaveRoom(clientRoomDic.ElementAt(0).Key,server);
+                LeaveRoom(key, server);
             }
         }
     }
