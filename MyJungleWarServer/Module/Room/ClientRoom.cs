@@ -23,6 +23,7 @@ namespace MyJungleWarServer.Module.Room
         public ClientRoomState RoomState { get; private set; }
         public Client HomeClient { get; private set; }
         public HashSet<Client> ClientSet { get; private set; }
+        public HashSet<string> ReadyUsernameSet { get; private set; }
 
         private const int roomMaxCount = 2;
 
@@ -35,6 +36,7 @@ namespace MyJungleWarServer.Module.Room
                 {
                     client
                 },
+                ReadyUsernameSet = new HashSet<string>(),
                 RoomState = ClientRoomState.WaitingJoin
             };
             return room;
@@ -44,20 +46,40 @@ namespace MyJungleWarServer.Module.Room
         {
             if (RoomState == ClientRoomState.WaitingJoin)
             {
-                if (!ClientSet.Contains(client))
+                ClientSet.Add(client);
+                if (ClientSet.Count >= roomMaxCount)
                 {
-                    ClientSet.Add(client);
-                    if (ClientSet.Count >= roomMaxCount)
-                    {
-                        RoomState = ClientRoomState.WaitingBattle;
-                    }
-                    var awayUserData = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
-                        .UserData_Get(client.GetUsername, client, server);
-                    BroadcastMessage(server, client, ActionCode.ClientRoom_Come, awayUserData);
-                    return awayUserData;
+                    RoomState = ClientRoomState.WaitingBattle;
                 }
+                var awayUserData = ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData)
+                    .UserData_Get(client.GetUsername, client, server);
+                BroadcastMessage(server, client, ActionCode.ClientRoom_Come, awayUserData);
+                return awayUserData;
             }
-            return "";
+            return string.Empty;
+        }
+
+        public string ReadyBattle(string data, Client client, Server server)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (data == ((int)ReturnCode.True).ToString())
+            {
+                ReadyUsernameSet.Add(client.GetUsername);
+            }
+            else
+            {
+                ReadyUsernameSet.Remove(client.GetUsername);
+            }
+            foreach(var item in ReadyUsernameSet)
+            {
+                sb.Append(item).Append(',');
+            }
+            if(sb.Length>0)
+            {
+                sb.Remove(sb.Length - 1, 1);
+            }
+            BroadcastMessage(server, client, ActionCode.ClientRoom_Ready, sb.ToString());
+            return sb.ToString() ;
         }
 
         public void LeaveRoom(Client client, Server server)

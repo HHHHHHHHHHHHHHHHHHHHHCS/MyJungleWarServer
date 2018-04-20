@@ -17,6 +17,10 @@ namespace MyJungleWarServer.Controller
         private Dictionary<RequestCode, BaseController> controllerDic =
             new Dictionary<RequestCode, BaseController>();
         private Server server;
+        private DefaultController defaultController;
+        private UserController userController;
+        private UserDataController userDataController;
+        private ClientRoomController clientRoomController;
 
         public ControllerManager(Server _server)
         {
@@ -27,32 +31,52 @@ namespace MyJungleWarServer.Controller
 
         private void InitController()
         {
-            DefaultController defaultController = new DefaultController();
+            defaultController = new DefaultController();
             controllerDic.Add(defaultController.RequestCode, defaultController);
-            UserController userController = new UserController();
+            userController = new UserController();
             controllerDic.Add(userController.RequestCode, userController);
-            UserDataController userDataController = new UserDataController();
+            userDataController = new UserDataController();
             controllerDic.Add(userDataController.RequestCode, userDataController);
-            ClientRoomController clientRoomController = new ClientRoomController();
+            clientRoomController = new ClientRoomController();
             controllerDic.Add(clientRoomController.RequestCode, clientRoomController);
         }
 
-        public T GetControllser<T>(RequestCode requestCode) where T: BaseController
+        public T GetController<T>(RequestCode requestCode) where T : BaseController
         {
-            controllerDic.TryGetValue(requestCode, out BaseController baseController);
-            if (baseController==null)
+            BaseController baseController = null;
+            switch (requestCode)
             {
-                Console.WriteLine("无法得到[" + requestCode + "]所对应的Controller，无法处理请求！");
-                return null;
+                case RequestCode.None:
+                    baseController = defaultController;
+                    break;
+                case RequestCode.User:
+                    baseController = userController;
+                    break;
+                case RequestCode.UserData:
+                    baseController = userDataController;
+                    break;
+                case RequestCode.ClientRoom:
+                    baseController = clientRoomController;
+                    break;
+                default:
+                    break;
+            }
+            if (baseController == null)
+            {
+                controllerDic.TryGetValue(requestCode, out baseController);
+                if (baseController == null)
+                {
+                    Console.WriteLine("无法得到[" + requestCode + "]所对应的Controller，无法处理请求！");
+                }
             }
             return (T)baseController;
         }
 
         public void HandleRequest(RequestCode requestCode, ActionCode actionCode
-            , string data,Client client)
+            , string data, Client client)
         {
-            var baseController = GetControllser<BaseController>(requestCode);
-            if(baseController!=null)
+            var baseController = GetController<BaseController>(requestCode);
+            if (baseController != null)
             {
                 string result = baseController.HandleByActionCode(actionCode, data, client, server);
                 server.SendRespone(client, actionCode, result);

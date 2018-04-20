@@ -15,7 +15,6 @@ namespace MyJungleWarServer.Controller
     {
         private UserDAO userDAO = new UserDAO();
 
-
         public UserController()
         {
             requestCode = RequestCode.User;
@@ -38,7 +37,7 @@ namespace MyJungleWarServer.Controller
             return result;
         }
 
-        public string Login(string data, Client client, Server server)
+        private string Login(string data, Client client, Server server)
         {
             string[] strs = data.Split(',');
             User user = userDAO.VerifyUser(client.SQLConn, strs[0], strs[1]);
@@ -49,7 +48,7 @@ namespace MyJungleWarServer.Controller
             }
             else
             {
-                var userdata =  ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
+                var userdata = ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData)
                     .UserData_Get(strs[0], client, server);
                 result = string.Format("{0},{1}", (int)ReturnCode.Success, userdata);
                 client.SetUsername(strs[0]);
@@ -57,7 +56,7 @@ namespace MyJungleWarServer.Controller
             return result;
         }
 
-        public string Register(string data, Client client, Server server)
+        private string Register(string data, Client client, Server server)
         {
             bool isSucceed = false;
             string[] strs = data.Split(',');
@@ -67,7 +66,7 @@ namespace MyJungleWarServer.Controller
                 isSucceed = userDAO.AddUser(client.SQLConn, strs[0], strs[1]);
                 if (isSucceed)
                 {
-                    ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
+                    ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData)
                         .UserData_Create( strs[0],client,server);
                 }
             }

@@ -9,5 +9,7 @@ namespace Common.Code
     {
         Success,//成功
         Fail,//失败
+        True,//flag_true
+        False,//flag_false
     }
 }

@@ -50,12 +50,12 @@ namespace MyJungleWarServer.Servers
         {
             try
             {
-                if (clientSocket == null || !clientSocket.Connected || !ar.IsCompleted)
+                if (clientSocket == null || !clientSocket.Connected
+                    || !ar.IsCompleted)
                 {
                     Close();
                     return;
                 }
-                
                 int count = clientSocket.EndReceive(ar);
                 if (count <= 0)
                 {
@@ -82,8 +82,11 @@ namespace MyJungleWarServer.Servers
 
         public void Send(ActionCode actionCode, string data)
         {
-            byte[] bytes = Message.PackData(actionCode, data);
-            clientSocket.Send(bytes);
+            if (clientSocket!=null)
+            {
+                byte[] bytes = Message.PackData(actionCode, data);
+                clientSocket.Send(bytes);
+            }
         }
 
         public void Close()
@@ -92,7 +95,7 @@ namespace MyJungleWarServer.Servers
             {
                 clientSocket.Close();
             }
-            server.ClientRoomList.LeaveRoom(this,server);
+            server.ClientRoomList.LeaveRoom(this, server);
             server.RemoveClient(this);
         }
 

@@ -11,13 +11,11 @@ namespace MyJungleWarServer.Module.Room
     {
         private Server server;
         private Dictionary<Client, ClientRoom> clientRoomDic;
-        private HashSet<Client> waitClientSet;
 
         public ClientRoomList(Server server)
         {
             this.server = server;
             clientRoomDic = new Dictionary<Client, ClientRoom>();
-            waitClientSet = new HashSet<Client>();
         }
 
         public List<ClientRoom> GetWaitJoinClientRoom()
@@ -41,6 +39,30 @@ namespace MyJungleWarServer.Module.Room
             return false;
         }
 
+        public string JoinRoom(string username, Client client, Server server)
+        {
+            foreach (var item in clientRoomDic.Values)
+            {
+                if (item.HomeClient.GetUsername == username)
+                {
+                    return item.JoinRoom(client, server);
+                }
+            }
+            return string.Empty;
+        }
+
+        public string ReadyBattle(string data, Client client, Server server)
+        {
+            string result = string.Empty;
+            var first = clientRoomDic.Values.Where(p => p.ClientSet.Contains(client)).First();
+            if (first != null)
+            {
+                result = first.ReadyBattle(data, client, server);
+            }
+            return result;
+        }
+
+
         public bool LeaveRoom(Client client, Server server)
         {
             foreach (var item in clientRoomDic.Values)
@@ -60,17 +82,6 @@ namespace MyJungleWarServer.Module.Room
             return false;
         }
 
-        public string JoinRoom(string username, Client client, Server server)
-        {
-            foreach (var item in clientRoomDic.Values)
-            {
-                if (item.HomeClient.GetUsername == username)
-                {
-                    return item.JoinRoom(client, server);
-                }
-            }
-            return "";
-        }
 
         public void CloseAllRoom(HashSet<Client> clientList)
         {

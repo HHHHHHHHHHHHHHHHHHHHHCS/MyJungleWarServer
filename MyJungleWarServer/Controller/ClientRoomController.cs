@@ -35,6 +35,7 @@ namespace MyJungleWarServer.Controller
                     result = JoinRoom(data, client, server);
                     break;
                 case ActionCode.ClientRoom_Ready:
+                    result = ReadyBattle(data, client, server);
                     break;
                 case ActionCode.ClientRoom_Leavel:
                     result = LeaveRoom(data, client, server);
@@ -45,11 +46,12 @@ namespace MyJungleWarServer.Controller
             return result;
         }
 
-        public string ShowRoomList(string data, Client client, Server server)
+
+        private string ShowRoomList(string data, Client client, Server server)
         {
             StringBuilder sb = new StringBuilder();
             var clientRoom = server.ClientRoomList.GetWaitJoinClientRoom();
-            var userData = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData);
+            var userData = ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData);
             string userDataStr;
             foreach (var item in clientRoom)
             {
@@ -63,13 +65,13 @@ namespace MyJungleWarServer.Controller
             return sb.ToString();
         }
 
-        public string CreateRoom(string data, Client client, Server server)
+        private string CreateRoom(string data, Client client, Server server)
         {
             string result;
             bool isSucceed = server.ClientRoomList.CreateRoom(client);
             if (isSucceed)
             {
-                string str = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
+                string str = ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData)
                  .UserData_Get(client.GetUsername, client, server);
                 result = string.Format("{0},{1}", (int)(isSucceed ? ReturnCode.Success : ReturnCode.Fail), str);
             }
@@ -80,14 +82,14 @@ namespace MyJungleWarServer.Controller
             return result;
         }
 
-        public string JoinRoom(string data, Client client, Server server)
+        private string JoinRoom(string data, Client client, Server server)
         {
-            string result = "";
+            string result = string.Empty;
             var awayUserData = server.ClientRoomList.JoinRoom(data, client, server);
 
             if (!string.IsNullOrEmpty(awayUserData))
             {
-                string userDataStr = ControllerManager.Instance.GetControllser<UserDataController>(RequestCode.UserData)
+                string userDataStr = ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData)
                     .UserData_Get(data, client, server);
                 result = string.Format("{0},{1},{2}", (int)ReturnCode.Success, userDataStr, awayUserData);
             }
@@ -99,10 +101,15 @@ namespace MyJungleWarServer.Controller
         }
 
 
-        public string LeaveRoom(string data, Client client, Server server)
+        private string ReadyBattle(string data, Client client, Server server)
         {
-            string result = server.ClientRoomList.LeaveRoom(client,server)
-                ?((int)ReturnCode.Success).ToString():((int)ReturnCode.Fail).ToString();
+            return server.ClientRoomList.ReadyBattle(data, client, server);
+        }
+
+        private string LeaveRoom(string data, Client client, Server server)
+        {
+            string result = server.ClientRoomList.LeaveRoom(client, server)
+                ? ((int)ReturnCode.Success).ToString() : ((int)ReturnCode.Fail).ToString();
             return result;
         }
     }

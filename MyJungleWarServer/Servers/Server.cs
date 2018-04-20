@@ -92,7 +92,10 @@ namespace MyJungleWarServer.Servers
 
         public void SendRespone(Client client, ActionCode actionCode, string data)
         {
-            client.Send(actionCode, data);
+            if (serverSocket!=null)
+            {
+                client.Send(actionCode, data);
+            }
         }
 
         public void HandleRequest(RequestCode requestCode, ActionCode actionCode
