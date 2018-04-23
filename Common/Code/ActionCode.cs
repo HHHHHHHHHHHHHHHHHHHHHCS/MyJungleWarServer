@@ -18,6 +18,9 @@ namespace Common.Code
         ClientRoom_Join,//客机加入
         ClientRoom_Come,//主机知道客机进入
         ClientRoom_Ready,//玩家准备
+        ClientRoom_AllReady,//全部玩家准备
+        ClientRoom_CancelReady,//开始游戏的时候 有玩家取消了准备
+        ClientRoom_StartGame,//全部玩家准备
         ClientRoom_Close,//主机关闭房间
         ClientRoom_Leavel,//玩家自己离开
         ClientRoom_Quit,//告诉别人 玩家退出

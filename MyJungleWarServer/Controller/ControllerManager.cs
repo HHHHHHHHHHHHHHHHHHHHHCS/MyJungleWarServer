@@ -78,6 +78,7 @@ namespace MyJungleWarServer.Controller
             var baseController = GetController<BaseController>(requestCode);
             if (baseController != null)
             {
+                Console.WriteLine(actionCode+"////"+data);
                 string result = baseController.HandleByActionCode(actionCode, data, client, server);
                 server.SendRespone(client, actionCode, result);
             }

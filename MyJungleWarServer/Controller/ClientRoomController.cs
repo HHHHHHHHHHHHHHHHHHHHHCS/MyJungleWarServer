@@ -84,7 +84,7 @@ namespace MyJungleWarServer.Controller
 
         private string JoinRoom(string data, Client client, Server server)
         {
-            string result = string.Empty;
+            string result = "";
             var awayUserData = server.ClientRoomList.JoinRoom(data, client, server);
 
             if (!string.IsNullOrEmpty(awayUserData))

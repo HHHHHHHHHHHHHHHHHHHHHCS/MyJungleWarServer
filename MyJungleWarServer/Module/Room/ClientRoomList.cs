@@ -48,12 +48,12 @@ namespace MyJungleWarServer.Module.Room
                     return item.JoinRoom(client, server);
                 }
             }
-            return string.Empty;
+            return "";
         }
 
         public string ReadyBattle(string data, Client client, Server server)
         {
-            string result = string.Empty;
+            string result = "";
             var first = clientRoomDic.Values.Where(p => p.ClientSet.Contains(client)).First();
             if (first != null)
             {

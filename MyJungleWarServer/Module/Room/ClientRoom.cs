@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace MyJungleWarServer.Module.Room
@@ -26,6 +27,7 @@ namespace MyJungleWarServer.Module.Room
         public HashSet<string> ReadyUsernameSet { get; private set; }
 
         private const int roomMaxCount = 2;
+        private Timer timer;
 
         public static ClientRoom CreateDefaultRoom(Client client)
         {
@@ -56,7 +58,7 @@ namespace MyJungleWarServer.Module.Room
                 BroadcastMessage(server, client, ActionCode.ClientRoom_Come, awayUserData);
                 return awayUserData;
             }
-            return string.Empty;
+            return "";
         }
 
         public string ReadyBattle(string data, Client client, Server server)
@@ -79,7 +81,31 @@ namespace MyJungleWarServer.Module.Room
                 sb.Remove(sb.Length - 1, 1);
             }
             BroadcastMessage(server, client, ActionCode.ClientRoom_Ready, sb.ToString());
+
+            //if (ReadyUsernameSet.Count >= roomMaxCount)
+            //{
+            //    AllReady(server);
+            //    BroadcastMessage(server, client, ActionCode.ClientRoom_AllReady, sb.ToString());
+            //}
+            //else if(timer!=null&& ReadyUsernameSet.Count < roomMaxCount)
+            //{
+            //    timer.Dispose();
+            //    BroadcastMessage(server, null, ActionCode.ClientRoom_CancelReady, "");
+            //}
             return sb.ToString() ;
+        }
+
+        public void AllReady(Server server)
+        {
+            timer = new Timer(StartGame, server, 0, 0);
+        }
+
+        public void StartGame(object state)
+        {
+            Server server = state as Server;
+            BroadcastMessage(server, null, ActionCode.ClientRoom_StartGame, "");
+            timer.Dispose();
+            timer = null;
         }
 
         public void LeaveRoom(Client client, Server server)
