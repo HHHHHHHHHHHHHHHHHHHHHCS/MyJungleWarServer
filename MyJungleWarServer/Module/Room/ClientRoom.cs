@@ -27,6 +27,7 @@ namespace MyJungleWarServer.Module.Room
         public HashSet<string> ReadyUsernameSet { get; private set; }
 
         private const int roomMaxCount = 2;
+        private const int waitTime = 5*1000;
         private Timer timer;
 
         public static ClientRoom CreateDefaultRoom(Client client)
@@ -82,22 +83,22 @@ namespace MyJungleWarServer.Module.Room
             }
             BroadcastMessage(server, client, ActionCode.ClientRoom_Ready, sb.ToString());
 
-            //if (ReadyUsernameSet.Count >= roomMaxCount)
-            //{
-            //    AllReady(server);
-            //    BroadcastMessage(server, client, ActionCode.ClientRoom_AllReady, sb.ToString());
-            //}
-            //else if(timer!=null&& ReadyUsernameSet.Count < roomMaxCount)
-            //{
-            //    timer.Dispose();
-            //    BroadcastMessage(server, null, ActionCode.ClientRoom_CancelReady, "");
-            //}
+            if (ReadyUsernameSet.Count >= roomMaxCount)
+            {
+                AllReady(server);
+                BroadcastMessage(server, null, ActionCode.ClientRoom_AllReady, sb.ToString());
+            }
+            else if(timer!=null&& ReadyUsernameSet.Count < roomMaxCount)
+            {
+                timer.Dispose();
+                BroadcastMessage(server, null, ActionCode.ClientRoom_CancelReady, "");
+            }
             return sb.ToString() ;
         }
 
         public void AllReady(Server server)
         {
-            timer = new Timer(StartGame, server, 0, 0);
+            timer = new Timer(StartGame, server, waitTime, 0);
         }
 
         public void StartGame(object state)
