@@ -11,5 +11,7 @@ namespace Common.Code
         Fail,//失败
         True,//flag_true
         False,//flag_false
+
+        Login_Already,//已经登录了
     }
 }

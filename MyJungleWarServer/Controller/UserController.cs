@@ -41,17 +41,29 @@ namespace MyJungleWarServer.Controller
         {
             string[] strs = data.Split(',');
             User user = userDAO.VerifyUser(client.SQLConn, strs[0], strs[1]);
-            string result;
+            string result = "";
             if (user == null)
             {
                 result=((int)ReturnCode.Fail).ToString();
             }
             else
             {
-                var userdata = ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData)
-                    .UserData_Get(strs[0], client, server);
-                result = string.Format("{0},{1}", (int)ReturnCode.Success, userdata);
-                client.SetUsername(strs[0]);
+                foreach(var item in server.ClientHashSet)
+                {
+                    if(item.GetUsername==user.Username)
+                    {
+                        result = ((int)ReturnCode.Login_Already).ToString();
+                        break;
+                    }
+                }
+                if(result=="")
+                {
+                    var userdata = ControllerManager.Instance.GetController<UserDataController>(RequestCode.UserData)
+                        .UserData_Get(strs[0], client, server);
+                    result = string.Format("{0},{1}", (int)ReturnCode.Success, userdata);
+                    client.SetUsername(strs[0]);
+                }
+
             }
             return result;
         }

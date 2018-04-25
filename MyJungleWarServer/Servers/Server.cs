@@ -18,24 +18,17 @@ namespace MyJungleWarServer.Servers
     {
         private IPEndPoint ipEndPoint;
         private Socket serverSocket;
-        private HashSet<Client> clientHashSet = new HashSet<Client>();
         private ControllerManager controllerManager;
         private MySqlConnection sqlConn;
 
-        public ClientRoomList ClientRoomList
-        {
-            get;
-            private set;
-        }
-
-        public Server()
-        {
-
-        }
+        public HashSet<Client> ClientHashSet { get; private set; }
+        public ClientRoomList ClientRoomList { get; private set; }
 
         public Server(string ipStr, int port)
         {
             controllerManager = new ControllerManager(this);
+            ClientHashSet = new HashSet<Client>();
+            ClientRoomList = new ClientRoomList(this);
             SetIPAndPort(ipStr, port);
         }
 
@@ -48,7 +41,6 @@ namespace MyJungleWarServer.Servers
         {
             try
             {
-                ClientRoomList = new ClientRoomList(this);
                 sqlConn = ConnHelper.Connect();
                 serverSocket = new Socket(AddressFamily.InterNetwork
                     , SocketType.Stream, ProtocolType.Tcp);
@@ -73,7 +65,7 @@ namespace MyJungleWarServer.Servers
                 Socket clientSocket = serverSocket.EndAccept(ar);
                 Client client = new Client(clientSocket, this, sqlConn);
                 client.Start();
-                clientHashSet.Add(client);
+                ClientHashSet.Add(client);
                 serverSocket.BeginAccept(AcceptCallBack, null);
             }
             catch (Exception e)
@@ -84,15 +76,15 @@ namespace MyJungleWarServer.Servers
 
         public void RemoveClient(Client client)
         {
-            lock (clientHashSet)
+            lock (ClientHashSet)
             {
-                clientHashSet.Remove(client);
+                ClientHashSet.Remove(client);
             }
         }
 
         public void SendRespone(Client client, ActionCode actionCode, string data)
         {
-            if (serverSocket!=null)
+            if (serverSocket != null)
             {
                 client.Send(actionCode, data);
             }
@@ -108,7 +100,7 @@ namespace MyJungleWarServer.Servers
         {
             sqlConn.Close();
             serverSocket.Close();
-            ClientRoomList.CloseAllRoom(clientHashSet);
+            ClientRoomList.CloseAllRoom(ClientHashSet);
         }
     }
 }
