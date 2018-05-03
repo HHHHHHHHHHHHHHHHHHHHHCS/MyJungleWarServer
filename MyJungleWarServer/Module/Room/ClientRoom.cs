@@ -1,4 +1,5 @@
 ﻿using Common.Code;
+using Common.Model;
 using MyJungleWarServer.Controller;
 using MyJungleWarServer.Servers;
 using System;
@@ -27,7 +28,7 @@ namespace MyJungleWarServer.Module.Room
         public HashSet<string> ReadyUsernameSet { get; private set; }
 
         private const int roomMaxCount = 2;
-        private const int waitTime = 5*1000;
+        private const int waitTime = 5 * 1000;
         private Timer timer;
 
         public static ClientRoom CreateDefaultRoom(Client client)
@@ -73,27 +74,27 @@ namespace MyJungleWarServer.Module.Room
             {
                 ReadyUsernameSet.Remove(client.GetUsername);
             }
-            foreach(var item in ReadyUsernameSet)
+            foreach (var item in ReadyUsernameSet)
             {
                 sb.Append(item).Append(',');
             }
-            if(sb.Length>0)
+            if (sb.Length > 0)
             {
                 sb.Remove(sb.Length - 1, 1);
             }
-            BroadcastMessage(server, client, ActionCode.ClientRoom_Ready, sb.ToString());
+            BroadcastMessage(server, null, ActionCode.ClientRoom_Ready, sb.ToString());
 
             if (ReadyUsernameSet.Count >= roomMaxCount)
             {
-                AllReady(server);
                 BroadcastMessage(server, null, ActionCode.ClientRoom_AllReady, sb.ToString());
+                AllReady(server);
             }
-            else if(timer!=null&& ReadyUsernameSet.Count < roomMaxCount)
+            else if (timer != null && ReadyUsernameSet.Count < roomMaxCount)
             {
                 timer.Dispose();
                 BroadcastMessage(server, null, ActionCode.ClientRoom_CancelReady, "");
             }
-            return sb.ToString() ;
+            return "";
         }
 
         public void AllReady(Server server)
@@ -104,13 +105,19 @@ namespace MyJungleWarServer.Module.Room
         public void StartGame(object state)
         {
             Server server = state as Server;
-            BroadcastMessage(server, null, ActionCode.ClientRoom_StartGame, "");
+            RoomState = ClientRoomState.Battle;
+            foreach (var client in ClientSet)
+            {
+                server.SendRespone(client, ActionCode.ClientRoom_StartGame
+                    , ((int)(client == HomeClient ? RoleType.Red : RoleType.Blue)).ToString());
+            }
             timer.Dispose();
             timer = null;
         }
 
         public void LeaveRoom(Client client, Server server)
-        {
+        {//TODO:判断在战斗的时候玩家离开房间
+
             if (HomeClient == client)
             {
                 _CloseRoom(client, server);
@@ -145,6 +152,7 @@ namespace MyJungleWarServer.Module.Room
 
         public void BroadcastMessage(Server server, Client excludeClient, ActionCode actionCode, string data)
         {
+            Console.WriteLine(ClientSet.Count);
             foreach (var item in ClientSet)
             {
                 if (item != excludeClient)
