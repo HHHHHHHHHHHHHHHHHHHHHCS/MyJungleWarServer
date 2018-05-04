@@ -21,6 +21,7 @@ namespace MyJungleWarServer.Controller
         private UserController userController;
         private UserDataController userDataController;
         private ClientRoomController clientRoomController;
+        private GameController gameController;
 
         public ControllerManager(Server _server)
         {
@@ -39,6 +40,8 @@ namespace MyJungleWarServer.Controller
             controllerDic.Add(userDataController.RequestCode, userDataController);
             clientRoomController = new ClientRoomController();
             controllerDic.Add(clientRoomController.RequestCode, clientRoomController);
+            gameController = new GameController();
+            controllerDic.Add(gameController.RequestCode, gameController);
         }
 
         public T GetController<T>(RequestCode requestCode) where T : BaseController

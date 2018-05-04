@@ -24,5 +24,8 @@ namespace Common.Code
         ClientRoom_Close,//主机关闭房间
         ClientRoom_Leavel,//玩家自己离开
         ClientRoom_Quit,//告诉别人 玩家退出
+
+        Game_Enter,//告诉别人自己加载完成了
+        Game_CanDo,//告诉别人可以开始战斗了
     }
 }

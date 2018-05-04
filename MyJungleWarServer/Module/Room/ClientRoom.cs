@@ -106,6 +106,7 @@ namespace MyJungleWarServer.Module.Room
         {
             Server server = state as Server;
             RoomState = ClientRoomState.Battle;
+            ReadyUsernameSet.Clear();
             foreach (var client in ClientSet)
             {
                 server.SendRespone(client, ActionCode.ClientRoom_StartGame
@@ -148,6 +149,16 @@ namespace MyJungleWarServer.Module.Room
                 RoomState = ClientRoomState.WaitingJoin;
             }
             BroadcastMessage(server, client, ActionCode.ClientRoom_Quit, ((int)ReturnCode.Success).ToString());
+        }
+
+        public string EnterScene(string data, Client client, Server server)
+        {
+            ReadyUsernameSet.Add(client.GetUsername);
+            if (ReadyUsernameSet.Count >= roomMaxCount)
+            {
+                BroadcastMessage(server, null, ActionCode.Game_CanDo, sb.ToString());
+            }
+            return "";
         }
 
         public void BroadcastMessage(Server server, Client excludeClient, ActionCode actionCode, string data)

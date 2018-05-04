@@ -90,5 +90,16 @@ namespace MyJungleWarServer.Module.Room
                 LeaveRoom(key, server);
             }
         }
+
+        public string EnterGameScene(string data, Client client, Server server)
+        {
+            string result = "";
+            var first = clientRoomDic.Values.Where(p => p.ClientSet.Contains(client)).First();
+            if (first != null)
+            {
+                result = first.EnterScene(data, client, server);
+            }
+            return result;
+        }
     }
 }
