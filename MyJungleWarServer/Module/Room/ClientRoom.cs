@@ -94,7 +94,7 @@ namespace MyJungleWarServer.Module.Room
                 timer.Dispose();
                 BroadcastMessage(server, null, ActionCode.ClientRoom_CancelReady, "");
             }
-            return "";
+            return null;
         }
 
         public void AllReady(Server server)
@@ -118,7 +118,6 @@ namespace MyJungleWarServer.Module.Room
 
         public void LeaveRoom(Client client, Server server)
         {//TODO:判断在战斗的时候玩家离开房间
-
             if (HomeClient == client)
             {
                 _CloseRoom(client, server);
@@ -138,6 +137,12 @@ namespace MyJungleWarServer.Module.Room
                 , ((int)ReturnCode.Success).ToString());
                 HomeClient = null;
             }
+            if(timer!=null)
+            {
+                timer.Dispose();
+                timer = null;
+            }
+
             ClientSet = null;
         }
 
@@ -149,6 +154,11 @@ namespace MyJungleWarServer.Module.Room
                 RoomState = ClientRoomState.WaitingJoin;
             }
             BroadcastMessage(server, client, ActionCode.ClientRoom_Quit, ((int)ReturnCode.Success).ToString());
+            if (timer != null)
+            {
+                timer.Dispose();
+                timer = null;
+            }
         }
 
         public string EnterScene(string data, Client client, Server server)
@@ -156,14 +166,14 @@ namespace MyJungleWarServer.Module.Room
             ReadyUsernameSet.Add(client.GetUsername);
             if (ReadyUsernameSet.Count >= roomMaxCount)
             {
-                BroadcastMessage(server, null, ActionCode.Game_CanDo, sb.ToString());
+                BroadcastMessage(server, null, ActionCode.Battle_CanPlay,"");
+                ReadyUsernameSet.Clear();
             }
             return "";
         }
 
         public void BroadcastMessage(Server server, Client excludeClient, ActionCode actionCode, string data)
         {
-            Console.WriteLine(ClientSet.Count);
             foreach (var item in ClientSet)
             {
                 if (item != excludeClient)

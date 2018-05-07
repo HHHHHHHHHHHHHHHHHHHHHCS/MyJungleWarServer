@@ -53,13 +53,13 @@ namespace MyJungleWarServer.Module.Room
 
         public string ReadyBattle(string data, Client client, Server server)
         {
-            string result = "";
+            string result = null;
             var first = clientRoomDic.Values.Where(p => p.ClientSet.Contains(client)).First();
             if (first != null)
             {
                 result = first.ReadyBattle(data, client, server);
             }
-            return result;
+            return null;
         }
 
 
@@ -94,6 +94,7 @@ namespace MyJungleWarServer.Module.Room
         public string EnterGameScene(string data, Client client, Server server)
         {
             string result = "";
+            Console.WriteLine(clientRoomDic.Count);
             var first = clientRoomDic.Values.Where(p => p.ClientSet.Contains(client)).First();
             if (first != null)
             {

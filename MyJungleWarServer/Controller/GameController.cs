@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace MyJungleWarServer.Controller
 {
-    public class GameController : BaseController
+    public class BattleController : BaseController
     {
-        public GameController()
+        public BattleController()
         {
-            requestCode = RequestCode.Game;
+            requestCode = RequestCode.Battle;
         }
 
         public override string HandleByActionCode(ActionCode code, string data, Client client, Server server)
@@ -20,7 +20,7 @@ namespace MyJungleWarServer.Controller
             string result = null;
             switch (code)
             {
-                case ActionCode.Game_Enter:
+                case ActionCode.Battle_Enter:
                     result = PlayerEnterScene(data, client, server);
                     break;
                 default:
@@ -31,7 +31,8 @@ namespace MyJungleWarServer.Controller
 
         private string PlayerEnterScene(string data, Client client, Server server)
         {
-            return "";
+            server.ClientRoomList.EnterGameScene(data, client, server);
+            return null;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace MyJungleWarServer.Controller
         private UserController userController;
         private UserDataController userDataController;
         private ClientRoomController clientRoomController;
-        private GameController gameController;
+        private BattleController battleController;
 
         public ControllerManager(Server _server)
         {
@@ -40,8 +40,8 @@ namespace MyJungleWarServer.Controller
             controllerDic.Add(userDataController.RequestCode, userDataController);
             clientRoomController = new ClientRoomController();
             controllerDic.Add(clientRoomController.RequestCode, clientRoomController);
-            gameController = new GameController();
-            controllerDic.Add(gameController.RequestCode, gameController);
+            battleController = new BattleController();
+            controllerDic.Add(battleController.RequestCode, battleController);
         }
 
         public T GetController<T>(RequestCode requestCode) where T : BaseController
@@ -60,6 +60,9 @@ namespace MyJungleWarServer.Controller
                     break;
                 case RequestCode.ClientRoom:
                     baseController = clientRoomController;
+                    break;
+                case RequestCode.Battle:
+                    baseController = battleController;
                     break;
                 default:
                     break;
@@ -82,7 +85,10 @@ namespace MyJungleWarServer.Controller
             if (baseController != null)
             {
                 string result = baseController.HandleByActionCode(actionCode, data, client, server);
-                server.SendRespone(client, actionCode, result);
+                if (result != null)
+                {
+                    server.SendRespone(client, actionCode, result);
+                }
             }
         }
     }

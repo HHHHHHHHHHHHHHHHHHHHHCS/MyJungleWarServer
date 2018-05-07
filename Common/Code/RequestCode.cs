@@ -10,6 +10,6 @@ namespace Common.Code
         User,
         UserData,
         ClientRoom,
-        Game,
+        Battle,
     }
 }
